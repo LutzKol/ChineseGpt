@@ -766,6 +766,45 @@
           display: none;
         }
       }
+      .footer-social-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 2.5rem;
+        margin: 2.5rem 0 0.5rem 0;
+      }
+      .footer-social-icon {
+        width: 56px;
+        height: 56px;
+        max-width: 18vw;
+        object-fit: contain;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.04);
+        box-shadow: 0 0 18px 2px #ffd70044;
+        filter: drop-shadow(0 0 12px #ffd70088);
+        transition: transform 0.22s cubic-bezier(.4,1.4,.6,1), box-shadow 0.22s;
+        animation: footer-social-pulse 2.2s infinite alternate;
+        cursor: pointer;
+      }
+      .footer-social-icon:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 32px 8px #ffd700cc, 0 2px 16px #C40000;
+        filter: drop-shadow(0 0 24px #ffd700cc);
+      }
+      @keyframes footer-social-pulse {
+        0% { filter: drop-shadow(0 0 12px #ffd70088); }
+        100% { filter: drop-shadow(0 0 28px #ffd700cc); }
+      }
+      @media (max-width: 700px) {
+        .footer-social-row {
+          gap: 1.2rem;
+        }
+        .footer-social-icon {
+          width: 40px;
+          height: 40px;
+        }
+      }
     </style>
   </head>
   <body class="min-h-screen flex flex-col text-[#C40000] bg-fixed">
@@ -893,6 +932,15 @@
       <img src="assets/e08f5ad41f27996e6c8cedddd986d432-chinese-symbol-geometric.webp" alt="Footer Logo" class="footer-logo absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 object-contain" />
       <div class="relative z-10 text-center text-xs font-semibold">
         © 2024 ChineseGPT. All rights reserved. Not financial advice.
+      </div>
+      <!-- Social Media Icons Row -->
+      <div class="footer-social-row">
+        <a href="https://x.com/chinese_gpt?s=11" target="_blank" rel="noopener noreferrer">
+          <img src="assets/x-com.png" alt="X (Twitter)" class="footer-social-icon" />
+        </a>
+        <a href="https://t.me/chineseGPTOfficial" target="_blank" rel="noopener noreferrer">
+          <img src="assets/telegram.png" alt="Telegram" class="footer-social-icon" />
+        </a>
       </div>
     </footer>
     <script>
