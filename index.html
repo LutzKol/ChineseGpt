@@ -722,6 +722,83 @@
           bottom: 320px;
         }
       }
+      @keyframes subtleFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+      }
+      .chatbot-cookies-row {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 18px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-end;
+        gap: 2.5rem;
+        z-index: 1;
+        pointer-events: none;
+      }
+      .chatbot-cookie {
+        max-width: 100px;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        opacity: 0.9;
+        filter: drop-shadow(0 2px 12px #FFD70088) blur(0.5px);
+        animation: subtleFloat 4s ease-in-out infinite;
+        pointer-events: none;
+        transition: max-width 0.3s;
+      }
+      .chatbot-cookie.delay-1 { animation-delay: 0s; }
+      .chatbot-cookie.delay-2 { animation-delay: 1.2s; }
+      .chatbot-cookie.delay-3 { animation-delay: 2.1s; }
+      @media (max-width: 700px) {
+        .chatbot-cookies-row {
+          gap: 1.2rem;
+        }
+        .chatbot-cookie {
+          max-width: 70px;
+        }
+      }
+      @media (max-width: 500px) {
+        .chatbot-cookies-row {
+          display: none;
+        }
+      }
+      @keyframes softFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+      }
+      .chatbot-cookie-abs {
+        position: absolute;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0.92;
+        filter: drop-shadow(0 2px 12px #FFD70088) blur(0.5px);
+        animation: softFloat 4s ease-in-out infinite;
+        transition: max-width 0.3s;
+        max-width: 90px;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+      .chatbot-cookie-abs.delay-1 { left: 38%; bottom: -1.7rem; animation-delay: 0s; }
+      .chatbot-cookie-abs.delay-2 { left: 52%; bottom: -1.2rem; animation-delay: 1.2s; }
+      .chatbot-cookie-abs.delay-3 { left: 45%; bottom: -2.2rem; animation-delay: 2.1s; }
+      @media (max-width: 700px) {
+        .chatbot-cookie-abs {
+          max-width: 60px;
+        }
+        .chatbot-cookie-abs.delay-1 { left: 32%; bottom: -1.2rem; }
+        .chatbot-cookie-abs.delay-2 { left: 58%; bottom: -0.7rem; }
+        .chatbot-cookie-abs.delay-3 { left: 45%; bottom: -1.7rem; }
+      }
+      @media (max-width: 500px) {
+        .chatbot-cookie-abs {
+          display: none;
+        }
+      }
     </style>
   </head>
   <body class="min-h-screen flex flex-col text-[#C40000] bg-fixed">
@@ -833,6 +910,10 @@
             style="height: 100%; min-height: 700px; z-index: 1; position: relative; background: #3B0000; border-radius: 2.5rem;"
             frameborder="0"
           ></iframe>
+          <!-- Decorative Fortune Cookies Absolutely Positioned Under Chatbot -->
+          <img src="assets/cookie.png" alt="Fortune Cookie" class="chatbot-cookie-abs delay-1" />
+          <img src="assets/cookie.png" alt="Fortune Cookie" class="chatbot-cookie-abs delay-2" />
+          <img src="assets/cookie.png" alt="Fortune Cookie" class="chatbot-cookie-abs delay-3" />
         </div>
         <img src="assets/white-tiger.png" alt="Silent Tiger" class="guardian-tiger" />
       </div>
