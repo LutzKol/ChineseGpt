@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChineseGPT - 神谕之语</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Serif SC (Chinese), Anton (Meme), ZCOOL KuaiLe (Display) -->
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Serif+SC:wght@700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Noto Serif SC', serif;
+        background: #C40000 url('assets/red-bg.png') repeat;
+        background-size: cover;
+      }
+      .meme-font {
+        font-family: 'Anton', Impact, sans-serif;
+      }
+      .display-font {
+        font-family: 'ZCOOL KuaiLe', 'Noto Serif SC', serif;
+      }
+      .gold-glow {
+        filter: drop-shadow(0 0 32px gold) drop-shadow(0 0 8px #ffd700);
+      }
+      .gold-underline {
+        position: relative;
+      }
+      .gold-underline::after {
+        content: '';
+        display: block;
+        height: 3px;
+        width: 100%;
+        background: linear-gradient(90deg, #ffd700 0%, #fffbe6 100%);
+        border-radius: 2px;
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        opacity: 0;
+        transition: opacity 0.2s, transform 0.2s;
+        transform: scaleX(0.7);
+      }
+      .gold-underline:hover::after {
+        opacity: 1;
+        transform: scaleX(1);
+      }
+      .gold-underline:hover {
+        transform: scale(1.08);
+      }
+      .vertical-chinese {
+        writing-mode: vertical-rl;
+        letter-spacing: 0.2em;
+      }
+      .scroll-bg {
+        background: rgba(255, 245, 220, 0.95);
+      }
+      .bamboo-bg {
+        background: url('assets/bamboo.png') left center/auto 80% no-repeat;
+      }
+      .bamboo-bg-right {
+        background: url('assets/bamboo.png') right center/auto 80% no-repeat;
+      }
+      .parchment {
+        background: #fffbe6;
+      }
+      .gold-border {
+        border: 3px solid #ffd700;
+        border-radius: 1.5rem;
+      }
+      .status-dot {
+        width: 12px;
+        height: 12px;
+        background: #3ec70b;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 8px;
+        box-shadow: 0 0 6px #3ec70b88;
+      }
+      .footer-logo {
+        opacity: 0.12;
+        filter: blur(1px);
+      }
+      .chip-bg {
+        position: absolute;
+        left: 50%;
+        top: 60%;
+        transform: translate(-50%, -50%) scale(1.2);
+        z-index: 0;
+        opacity: 0.5;
+        pointer-events: none;
+      }
+      .chatbot-section-bg {
+        background: #C40000 url('assets/red-bg.png') center/cover fixed;
+        position: relative;
+        overflow: hidden;
+      }
+      .parallax {
+        background-attachment: fixed;
+      }
+      .golden-frame {
+        border: 4px solid #ffd700;
+        border-radius: 2rem;
+        box-shadow: 0 0 32px 8px #ffd70088, 0 0 0 8px #fffbe622;
+        background: #3B0000;
+        position: relative;
+        z-index: 2;
+      }
+      .golden-glow {
+        box-shadow: 0 0 32px 8px #ffd70088, 0 0 0 8px #fffbe622;
+      }
+      .sparkle {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: radial-gradient(circle, #fffbe6 60%, #ffd700 100%);
+        border-radius: 50%;
+        opacity: 0.7;
+        animation: sparkle-float 2.5s infinite ease-in-out;
+        pointer-events: none;
+      }
+      .sparkle1 { left: 20%; top: 10%; animation-delay: 0s; }
+      .sparkle2 { left: 70%; top: 20%; animation-delay: 1s; }
+      .sparkle3 { left: 50%; top: 80%; animation-delay: 1.5s; }
+      .sparkle4 { left: 80%; top: 60%; animation-delay: 0.5s; }
+      @keyframes sparkle-float {
+        0%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
+        50% { transform: translateY(-18px) scale(1.2); opacity: 1; }
+      }
+      .robo-float {
+        animation: robo-float 3.5s ease-in-out infinite;
+      }
+      @keyframes robo-float {
+        0%, 100% { transform: translateY(0) scale(1); }
+        50% { transform: translateY(-18px) scale(1.07); }
+      }
+      .robo-pulse {
+        animation: robo-pulse 2.2s infinite;
+      }
+      @keyframes robo-pulse {
+        0%, 100% { filter: drop-shadow(0 0 12px #ffd70088); }
+        50% { filter: drop-shadow(0 0 32px #ffd700cc); }
+      }
+      .chatbot-label {
+        font-family: 'ZCOOL KuaiLe', 'Noto Serif SC', serif;
+        color: #ffd700;
+        font-size: 2rem;
+        letter-spacing: 0.08em;
+        text-align: center;
+        margin-bottom: 1rem;
+        text-shadow: 0 2px 8px #3B0000, 0 0 12px #ffd70088;
+      }
+      .chatbot-iframe-box {
+        background: #3B0000;
+        border: 3px solid #ffd700;
+        border-radius: 2rem;
+        box-shadow: 0 0 32px 8px #ffd70088, 0 0 0 8px #fffbe622;
+        overflow: hidden;
+        position: relative;
+        z-index: 2;
+      }
+      .chatbot-iframe-box iframe {
+        border-radius: 2rem;
+        background: #3B0000;
+      }
+      .chatbot-input:focus {
+        outline: none;
+        box-shadow: 0 2px 0 0 #ffd700, 0 0 12px #ffd70088;
+        border-bottom: 3px solid #ffd700;
+        transition: box-shadow 0.3s, border-bottom 0.3s;
+      }
+      .font-chinese {
+        font-family: 'ZCOOL KuaiLe', 'Noto Serif SC', serif;
+      }
+      .headline-outline {
+        text-shadow: 0 2px 8px #3B0000, 0 0 12px #ffd70088, 1px 1px 0 #fffbe6;
+      }
+      .chatbot-mystic-bg {
+        background: linear-gradient(135deg, #2a0000 0%, #3B0000 60%, #5a0a0a 100%);
+        position: relative;
+        overflow: hidden;
+      }
+      .mystic-frame {
+        border: 4px solid #ffd700;
+        border-radius: 2.5rem;
+        box-shadow: 0 0 32px 8px #ffd700cc, 0 0 0 8px #fffbe622, 0 0 32px 8px #ff003388 inset;
+        background: #3B0000;
+        position: relative;
+        z-index: 2;
+        animation: neon-pulse 2.5s infinite alternate;
+      }
+      @keyframes neon-pulse {
+        0% { box-shadow: 0 0 32px 8px #ffd700cc, 0 0 0 8px #fffbe622, 0 0 16px 4px #ff003355 inset; }
+        100% { box-shadow: 0 0 48px 16px #ffd700ee, 0 0 0 12px #fffbe655, 0 0 32px 12px #ff0033cc inset; }
+      }
+      .incense-smoke {
+        position: absolute;
+        left: 10%;
+        top: 0;
+        width: 40px;
+        height: 120px;
+        pointer-events: none;
+        opacity: 0.5;
+        z-index: 3;
+        animation: smoke-float 6s infinite linear;
+      }
+      .incense-smoke2 {
+        left: 80%;
+        top: 10%;
+        width: 32px;
+        height: 100px;
+        opacity: 0.35;
+        animation-delay: 2s;
+      }
+      @keyframes smoke-float {
+        0% { transform: translateY(0) scaleX(1); opacity: 0.5; }
+        50% { transform: translateY(-30px) scaleX(1.1); opacity: 0.7; }
+        100% { transform: translateY(-60px) scaleX(1); opacity: 0.3; }
+      }
+      .mystic-header {
+        font-family: 'ZCOOL KuaiLe', 'Noto Serif SC', serif;
+        color: #ffd700;
+        font-size: 2rem;
+        letter-spacing: 0.12em;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 2px 12px #3B0000, 0 0 18px #ffd70088, 1px 1px 0 #fffbe6;
+        animation: header-glow 2.5s infinite alternate;
+      }
+      @keyframes header-glow {
+        0% { text-shadow: 0 2px 12px #3B0000, 0 0 18px #ffd70088, 1px 1px 0 #fffbe6; }
+        100% { text-shadow: 0 4px 24px #3B0000, 0 0 32px #ffd700cc, 2px 2px 0 #fffbe6; }
+      }
+      .dragon-float {
+        position: absolute;
+        left: 5%;
+        top: 40%;
+        width: 90px;
+        z-index: 4;
+        opacity: 0.7;
+        animation: dragon-float 7s infinite ease-in-out;
+      }
+      @keyframes dragon-float {
+        0%, 100% { transform: translateY(0) scale(1); }
+        50% { transform: translateY(-30px) scale(1.05); }
+      }
+      .bamboo-sway {
+        position: absolute;
+        right: -40px;
+        top: 30%;
+        width: 120px;
+        z-index: 3;
+        opacity: 0.5;
+        animation: bamboo-sway 5s infinite ease-in-out;
+      }
+      @keyframes bamboo-sway {
+        0%, 100% { transform: rotate(-2deg) scaleY(1); }
+        50% { transform: rotate(6deg) scaleY(1.04); }
+      }
+      .coin-btn {
+        background: linear-gradient(135deg, #ffd700 60%, #fffbe6 100%);
+        border-radius: 50%;
+        box-shadow: 0 0 16px 4px #ffd70088, 0 2px 8px #3B0000;
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 12px;
+        transition: transform 0.18s, box-shadow 0.18s;
+        border: 2px solid #fffbe6;
+        cursor: pointer;
+      }
+      .coin-btn:hover {
+        transform: scale(1.13) translateY(-6px);
+        box-shadow: 0 0 32px 8px #ffd700cc, 0 2px 16px #3B0000;
+      }
+      .fortune-cookie {
+        position: fixed;
+        top: -80px;
+        width: 60px;
+        height: 60px;
+        z-index: 50;
+        opacity: 0.65;
+        filter: drop-shadow(0 0 16px #ffd700cc) drop-shadow(0 2px 8px #3B0000);
+        transition: opacity 0.2s;
+        cursor: pointer;
+        pointer-events: auto;
+      }
+      .fortune-cookie:hover {
+        opacity: 1;
+        z-index: 60;
+      }
+      .fortune-wiggle {
+        animation-name: fortune-float;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+      @keyframes fortune-float {
+        0% {
+          transform: translateY(-80px) rotate(-8deg) scale(1);
+        }
+        10% {
+          transform: translateY(10vh) rotate(6deg) scale(1.08);
+        }
+        30% {
+          transform: translateY(30vh) rotate(-4deg) scale(1.04);
+        }
+        60% {
+          transform: translateY(60vh) rotate(8deg) scale(1.1);
+        }
+        80% {
+          transform: translateY(90vh) rotate(-6deg) scale(1.06);
+        }
+        100% {
+          transform: translateY(110vh) rotate(4deg) scale(1);
+        }
+      }
+      .fortune-tooltip {
+        position: absolute;
+        left: 50%;
+        bottom: 70px;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.95);
+        color: #C40000;
+        font-family: 'ZCOOL KuaiLe', 'Noto Serif SC', serif;
+        font-size: 1rem;
+        padding: 0.5em 1em;
+        border-radius: 1em;
+        box-shadow: 0 2px 12px #C40000cc;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+        z-index: 100;
+      }
+      .fortune-cookie:hover .fortune-tooltip {
+        opacity: 1;
+      }
+      .guardian-dragon {
+        position: absolute;
+        left: -110px;
+        top: 50%;
+        transform: translateY(-50%) scale(1.18) rotate(-6deg);
+        max-width: 160px;
+        width: 18vw;
+        min-width: 80px;
+        filter: drop-shadow(0 0 32px #ffd700cc) drop-shadow(0 2px 8px #C40000) brightness(1.1);
+        z-index: 5;
+        pointer-events: none;
+        animation: dragon-ember 2.8s infinite alternate;
+      }
+      @keyframes dragon-ember {
+        0% { filter: drop-shadow(0 0 16px #ffd70088) drop-shadow(0 2px 8px #C40000) brightness(1.1); }
+        100% { filter: drop-shadow(0 0 40px #ffd700cc) drop-shadow(0 2px 16px #C40000) brightness(1.18); }
+      }
+      .guardian-tiger {
+        position: absolute;
+        right: -110px;
+        top: 50%;
+        transform: translateY(-50%) scale(1.13) rotate(7deg);
+        max-width: 150px;
+        width: 17vw;
+        min-width: 80px;
+        filter: drop-shadow(0 0 24px #f87171cc) drop-shadow(0 2px 8px #C40000) brightness(1.08);
+        z-index: 5;
+        pointer-events: none;
+        animation: tiger-breathe 3.2s infinite alternate;
+      }
+      @keyframes tiger-breathe {
+        0% { filter: drop-shadow(0 0 16px #f8717188) drop-shadow(0 2px 8px #C40000) brightness(1.08); }
+        100% { filter: drop-shadow(0 0 36px #f87171cc) drop-shadow(0 2px 16px #C40000) brightness(1.15); }
+      }
+      .chatbot-guardians-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        gap: 1.5rem;
+        position: relative;
+        z-index: 2;
+      }
+      .guardian-dragon {
+        max-width: 120px;
+        min-width: 60px;
+        width: 14vw;
+        margin-right: 1rem;
+        filter: drop-shadow(0 0 24px #ffd700cc) drop-shadow(0 2px 8px #C40000) brightness(1.1);
+        transform: rotate(-8deg) scale(1.08);
+        z-index: 3;
+        pointer-events: none;
+        animation: dragon-ember 2.8s infinite alternate;
+      }
+      .guardian-tiger {
+        max-width: 110px;
+        min-width: 55px;
+        width: 13vw;
+        margin-left: 1rem;
+        filter: drop-shadow(0 0 18px #f87171cc) drop-shadow(0 2px 8px #C40000) brightness(1.08);
+        transform: scaleX(-1) rotate(-7deg) scale(1.04);
+        z-index: 3;
+        pointer-events: none;
+        animation: tiger-breathe 3.2s infinite alternate;
+      }
+      @media (max-width: 900px) {
+        .guardian-dragon {
+          max-width: 70px;
+          min-width: 36px;
+          margin-right: 0.5rem;
+        }
+        .guardian-tiger {
+          max-width: 65px;
+          min-width: 32px;
+          margin-left: 0.5rem;
+        }
+      }
+      @media (max-width: 700px) {
+        .chatbot-guardians-row {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+        .guardian-dragon, .guardian-tiger {
+          margin: 0;
+          max-width: 60px;
+          min-width: 28px;
+          width: 18vw;
+          display: block;
+          transform: none;
+        }
+        .guardian-dragon {
+          order: 0;
+        }
+        .mystic-frame {
+          order: 1;
+        }
+        .guardian-tiger {
+          order: 2;
+        }
+      }
+      .chatbot-guardians-flex {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        position: relative;
+        z-index: 2;
+      }
+      .guardian-dragon {
+        max-width: 220px;
+        min-width: 120px;
+        width: 22vw;
+        margin-right: 2.5rem;
+        filter: drop-shadow(0 0 48px #ffd700ee) drop-shadow(0 0 24px #C40000cc) brightness(1.15);
+        transform: rotate(-8deg) scale(1.6);
+        z-index: 3;
+        pointer-events: none;
+        animation: dragon-ember 2.8s infinite alternate, parallax-float 8s ease-in-out infinite;
+        transition: opacity 0.3s, filter 0.3s, transform 0.3s;
+        object-fit: contain;
+      }
+      .guardian-tiger {
+        max-width: 200px;
+        min-width: 110px;
+        width: 20vw;
+        margin-left: 2.5rem;
+        filter: drop-shadow(0 0 36px #f87171ee) drop-shadow(0 0 18px #C40000cc) brightness(1.13);
+        transform: scaleX(-1) rotate(-7deg) scale(1.5);
+        z-index: 3;
+        pointer-events: none;
+        animation: tiger-breathe 3.2s infinite alternate, parallax-float 9s ease-in-out infinite;
+        transition: opacity 0.3s, filter 0.3s, transform 0.3s;
+        object-fit: contain;
+      }
+      @keyframes parallax-float {
+        0%, 100% { transform: translateY(0) scale(1.6) rotate(-8deg); }
+        50% { transform: translateY(-18px) scale(1.68) rotate(-8deg); }
+      }
+      @media (max-width: 1100px) {
+        .guardian-dragon {
+          max-width: 140px;
+          min-width: 70px;
+          margin-right: 1rem;
+          transform: rotate(-8deg) scale(1.15);
+        }
+        .guardian-tiger {
+          max-width: 130px;
+          min-width: 65px;
+          margin-left: 1rem;
+          transform: scaleX(-1) rotate(-7deg) scale(1.1);
+        }
+        .chatbot-guardians-flex {
+          max-width: 98vw;
+        }
+      }
+      @media (max-width: 700px) {
+        .guardian-dragon, .guardian-tiger {
+          opacity: 0.13;
+          position: absolute;
+          top: 60%;
+          left: 10vw;
+          right: 10vw;
+          margin: 0;
+          max-width: 60vw;
+          min-width: 0;
+          width: 40vw;
+          z-index: 1;
+        }
+        .guardian-dragon {
+          left: 0;
+          right: auto;
+          top: 60%;
+        }
+        .guardian-tiger {
+          right: 0;
+          left: auto;
+          top: 60%;
+        }
+        .chatbot-guardians-flex {
+          justify-content: center;
+        }
+      }
+      @media (max-width: 500px) {
+        .guardian-dragon, .guardian-tiger {
+          display: none;
+        }
+      }
+      .top-logo {
+        height: 170px;
+        max-width: 240px;
+        width: 32vw;
+        margin: 0 auto 1.5rem auto;
+        display: block;
+        z-index: 10;
+        filter: drop-shadow(0 0 32px gold) drop-shadow(0 0 8px #ffd700);
+        transition: height 0.3s, max-width 0.3s;
+      }
+      @media (max-width: 700px) {
+        .top-logo {
+          height: 110px;
+          max-width: 140px;
+          width: 60vw;
+        }
+      }
+      .cat-gif-pulse {
+        display: block;
+        margin: 1.5rem auto 1.5rem auto;
+        width: 200px;
+        max-width: 90vw;
+        border-radius: 1.5rem;
+        box-shadow: 0 0 32px 8px #ffd70088, 0 0 0 8px #fffbe622;
+        filter: drop-shadow(0 0 12px #ffd700cc);
+        z-index: 12;
+        position: relative;
+        animation: cat-pulse 2.2s infinite alternate;
+        object-fit: contain;
+        mix-blend-mode: lighten;
+      }
+      @keyframes cat-pulse {
+        0% { filter: drop-shadow(0 0 12px #ffd70088) brightness(1); }
+        100% { filter: drop-shadow(0 0 32px #ffd700cc) brightness(1.08); }
+      }
+      @media (max-width: 700px) {
+        .cat-gif-pulse {
+          width: 70vw;
+          max-width: 70vw;
+          margin: 1.2rem auto 1.2rem auto;
+        }
+      }
+      .hero-logo-clouds {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      .cloud-img {
+        position: relative;
+        width: 140px;
+        opacity: 0.92;
+        z-index: 2;
+        pointer-events: none;
+        filter: drop-shadow(0 0 32px #fffbe6cc);
+        transition: width 0.3s, margin 0.3s;
+        margin: 0 0.5rem;
+      }
+      .cloud-left-1 { animation: cloud-float-1 7s ease-in-out infinite; }
+      .cloud-left-2 { animation: cloud-float-2 8.5s ease-in-out infinite; }
+      .cloud-left-3 { animation: cloud-float-3 9.5s ease-in-out infinite; margin-left: -1.2rem; opacity: 0.8; }
+      .cloud-left-4 { animation: cloud-float-4 10.5s ease-in-out infinite; margin-left: -2.2rem; opacity: 0.7; }
+      .cloud-left-5 { animation: cloud-float-2 11.5s ease-in-out infinite; margin-left: -3.2rem; opacity: 0.6; }
+      .cloud-right-1 { animation: cloud-float-3 7.5s ease-in-out infinite; }
+      .cloud-right-2 { animation: cloud-float-4 8.5s ease-in-out infinite; }
+      .cloud-right-3 { animation: cloud-float-1 9.5s ease-in-out infinite; margin-right: -1.2rem; opacity: 0.8; }
+      .cloud-right-4 { animation: cloud-float-2 10.5s ease-in-out infinite; margin-right: -2.2rem; opacity: 0.7; }
+      .cloud-right-5 { animation: cloud-float-4 11.5s ease-in-out infinite; margin-right: -3.2rem; opacity: 0.6; }
+      .top-logo {
+        position: relative;
+        z-index: 10;
+        margin: 0 0.5rem;
+      }
+      @media (max-width: 700px) {
+        .cloud-img {
+          width: 70px;
+        }
+      }
+      @keyframes cloud-float-1 {
+        0%, 100% { transform: translateY(0); opacity: 0.85; }
+        50% { transform: translateY(-18px); opacity: 0.65; }
+      }
+      @keyframes cloud-float-2 {
+        0%, 100% { transform: translateY(0); opacity: 0.85; }
+        50% { transform: translateY(14px); opacity: 0.7; }
+      }
+      @keyframes cloud-float-3 {
+        0%, 100% { transform: translateY(0); opacity: 0.85; }
+        50% { transform: translateY(-12px); opacity: 0.7; }
+      }
+      @keyframes cloud-float-4 {
+        0%, 100% { transform: translateY(0); opacity: 0.85; }
+        50% { transform: translateY(16px); opacity: 0.65; }
+      }
+      @media (max-width: 700px) {
+        .cloud-img {
+          width: 70px;
+        }
+        .cloud-left-1, .cloud-left-2 {
+          left: -10px;
+        }
+        .cloud-right-1, .cloud-right-2 {
+          right: -10px;
+        }
+        .cloud-left-2, .cloud-right-2 {
+          top: 90px;
+        }
+      }
+      .scroll-chinese-stack {
+        position: absolute;
+        left: 2.5rem;
+        top: 10%;
+        transform: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        line-height: 0.95;
+        font-family: 'ZCOOL KuaiLe', 'Noto Serif SC', serif;
+        font-size: 3.5rem;
+        color: #FFD700;
+        text-shadow: 0 0 18px #FFD700cc, 0 2px 12px #C40000;
+        z-index: 10;
+        pointer-events: none;
+        animation: scroll-chinese-float 2.8s ease-in-out infinite alternate;
+        opacity: 0;
+        transition: opacity 0.8s, top 0.8s;
+      }
+      .scroll-chinese-stack.visible {
+        opacity: 1;
+        top: 12%;
+      }
+      @keyframes scroll-chinese-float {
+        0% { filter: brightness(1.08); }
+        100% { filter: brightness(1.18) drop-shadow(0 0 18px #FFD700cc); }
+      }
+      @media (max-width: 1100px) {
+        .scroll-chinese-stack {
+          font-size: 2rem;
+          left: 0.5rem;
+          top: 7%;
+        }
+      }
+      @media (max-width: 700px) {
+        .scroll-chinese-stack {
+          display: none;
+        }
+      }
+      .scroll-soup-bowl {
+        position: absolute;
+        left: 180px;
+        bottom: 480px;
+        max-width: 220px;
+        opacity: 0.9;
+        filter: drop-shadow(0 5px 30px rgba(255,255,255,0.1)) drop-shadow(0 8px 32px #0008);
+        z-index: 12;
+        animation: float 5s ease-in-out infinite;
+        transition: transform 0.3s ease;
+        transform: scale(1.05);
+      }
+      .scroll-soup-bowl:hover {
+        transform: scale(1.05) rotate(1deg);
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+      }
+      .soup-tooltip {
+        position: absolute;
+        left: 50%;
+        bottom: 100%;
+        transform: translateX(-50%) translateY(-8px);
+        background: rgba(0,0,0,0.55);
+        color: #fff;
+        font-size: 0.75rem;
+        font-style: italic;
+        letter-spacing: 0.05em;
+        padding: 2px 10px;
+        border-radius: 0.7em;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0.92;
+        z-index: 20;
+      }
+      @media (max-width: 700px) {
+        .scroll-soup-bowl {
+          max-width: 150px;
+          left: 80px;
+          bottom: 320px;
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col text-[#C40000] bg-fixed">
+    <!-- Floating Fortune Cookies -->
+    <div id="fortune-cookies-root"></div>
+    <!-- 🧧 Header: Logo -->
+    <header class="flex flex-col items-center pt-8 pb-2">
+      <div class="hero-logo-clouds">
+        <img src="assets/cloud.png" alt="Cloud left 1" class="cloud-img cloud-left-1" />
+        <img src="assets/cloud.png" alt="Cloud left 2" class="cloud-img cloud-left-2" />
+        <img src="assets/cloud.png" alt="Cloud left 3" class="cloud-img cloud-left-3" />
+        <img src="assets/cloud.png" alt="Cloud left 4" class="cloud-img cloud-left-4" />
+        <img src="assets/cloud.png" alt="Cloud left 5" class="cloud-img cloud-left-5" />
+        <img src="assets/e08f5ad41f27996e6c8cedddd986d432-chinese-symbol-geometric.webp" alt="Chinese Symbol Logo" class="top-logo" />
+        <img src="assets/cloud.png" alt="Cloud right 1" class="cloud-img cloud-right-1" />
+        <img src="assets/cloud.png" alt="Cloud right 2" class="cloud-img cloud-right-2" />
+        <img src="assets/cloud.png" alt="Cloud right 3" class="cloud-img cloud-right-3" />
+        <img src="assets/cloud.png" alt="Cloud right 4" class="cloud-img cloud-right-4" />
+        <img src="assets/cloud.png" alt="Cloud right 5" class="cloud-img cloud-right-5" />
+      </div>
+    </header>
+    <!-- 🧭 Navigation Bar -->
+    <nav class="sticky top-0 z-30 bg-[#C40000] bg-opacity-95 flex justify-center gap-8 py-4 text-lg font-bold meme-font text-[#ffd700] shadow-lg">
+      <a href="#about" class="gold-underline transition-transform">About</a>
+      <a href="#token" class="gold-underline transition-transform">Token</a>
+      <a href="#roadmap" class="gold-underline transition-transform">Roadmap</a>
+      <a href="#chatbot" class="gold-underline transition-transform">Chatbot</a>
+    </nav>
+    <!-- 🐉 Hero Section -->
+    <section id="about" class="relative flex flex-col items-center justify-center py-12 px-4">
+      <img src="assets/bgchina (1).png" alt="Golden Frame" class="absolute inset-0 w-full h-full object-cover pointer-events-none select-none" style="z-index:0; opacity:0.7;" />
+      <div class="relative z-10 flex flex-col items-center max-w-2xl mx-auto">
+        <div class="text-sm font-bold tracking-widest mb-2" style="font-family: 'Noto Serif SC', serif; color: #C40000;">神谕之语</div>
+        <h1 class="font-chinese text-yellow-400 text-3xl sm:text-5xl tracking-wider drop-shadow-xl headline-outline text-center font-extrabold mb-2">
+          He doesn’t speak Mandarin. He <em class="text-[#ffd700]">is</em> Mandarin. 🥢🐉
+        </h1>
+        <img src="assets/cat.gif" alt="Dancing cat" class="cat-gif-pulse mt-6 mb-6" />
+      </div>
+      <!-- Decorative vertical Chinese text -->
+      <div class="absolute left-2 bottom-4 text-[#C40000] opacity-40 vertical-chinese text-lg" style="font-family: 'Noto Serif SC', serif;">智慧之源</div>
+      <div class="absolute right-2 bottom-4 text-[#C40000] opacity-40 vertical-chinese text-lg" style="font-family: 'Noto Serif SC', serif;">命运之路</div>
+    </section>
+    <!-- 📜 Wisdom Footer Line (below Hero) -->
+    <p class="font-chinese text-white text-sm opacity-80 tracking-wide text-center mt-6">
+      5,000 years of wisdom. 1 token. 0 taxes.
+    </p>
+    <!-- 📜 Roadmap Section -->
+    <section id="roadmap" class="relative py-16 px-4 scroll-bg bamboo-bg bamboo-bg-right">
+      <!-- Soup Bowl (Wisdom Soup) -->
+      <div class="scroll-soup-bowl group">
+        <span class="soup-tooltip">Wisdom soup unlocked.</span>
+        <img src="assets/soup.png" alt="Wisdom Soup Bowl" style="width:100%;height:auto;display:block;" />
+      </div>
+      <!-- Vertical Chinese Characters Stack -->
+      <div class="scroll-chinese-stack" id="scroll-chinese-stack">
+        <span>智慧</span>
+        <span>命运</span>
+        <span>力量</span>
+        <span>繁荣</span>
+        <span>启示</span>
+      </div>
+      <div class="flex flex-col items-center mb-10">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">📜</span>
+          <h2 class="font-chinese text-yellow-400 text-3xl md:text-4xl tracking-wider text-center mb-8 drop-shadow-xl headline-outline">
+            THE SCROLL OF ENLIGHTENMENT
+          </h2>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
+        <div class="group bg-white/10 backdrop-blur-md border border-white/20 p-6 flex flex-col items-center text-center relative rounded-3xl transition-all duration-300 hover:scale-105 hover:border-yellow-300 hover:shadow-[0_0_25px_#facc15] cursor-pointer">
+          <span class="status-dot absolute top-4 left-4"></span>
+          <div class="font-chinese font-bold text-lg mb-2 transition-all duration-300 group-hover:text-yellow-300">Birth of the Scroll</div>
+          <div class="text-white/70 group-hover:text-white transition-all duration-300">0 tax. 100% fate.</div>
+        </div>
+        <div class="group bg-white/10 backdrop-blur-md border border-white/20 p-6 flex flex-col items-center text-center relative rounded-3xl transition-all duration-300 hover:scale-105 hover:border-yellow-300 hover:shadow-[0_0_25px_#facc15] cursor-pointer">
+          <span class="status-dot absolute top-4 left-4"></span>
+          <div class="font-chinese font-bold text-lg mb-2 transition-all duration-300 group-hover:text-yellow-300">Bless the Degens</div>
+          <div class="text-white/70 group-hover:text-white transition-all duration-300">Airdrop to the worthy (and the unworthy).</div>
+        </div>
+        <div class="group bg-white/10 backdrop-blur-md border border-white/20 p-6 flex flex-col items-center text-center relative rounded-3xl transition-all duration-300 hover:scale-105 hover:border-yellow-300 hover:shadow-[0_0_25px_#facc15] cursor-pointer">
+          <span class="status-dot absolute top-4 left-4"></span>
+          <div class="font-chinese font-bold text-lg mb-2 transition-all duration-300 group-hover:text-yellow-300">Rise of the Jade Whale</div>
+          <div class="text-white/70 group-hover:text-white transition-all duration-300">He buys. You follow.</div>
+        </div>
+        <div class="group bg-white/10 backdrop-blur-md border border-white/20 p-6 flex flex-col items-center text-center relative rounded-3xl transition-all duration-300 hover:scale-105 hover:border-yellow-300 hover:shadow-[0_0_25px_#facc15] cursor-pointer">
+          <span class="status-dot absolute top-4 left-4"></span>
+          <div class="font-chinese font-bold text-lg mb-2 transition-all duration-300 group-hover:text-yellow-300">Enlightenment or Rug</div>
+          <div class="text-white/70 group-hover:text-white transition-all duration-300">Only destiny knows...</div>
+        </div>
+      </div>
+    </section>
+    <!-- 🤖 Chatbot Section -->
+    <section id="chatbot" class="chatbot-mystic-bg py-20 px-4 flex flex-col items-center relative overflow-x-hidden">
+      <!-- Mystic Header -->
+      <div class="mystic-header">Consult the Ancient Bot. He speaks in riddles. And alpha.</div>
+      <!-- Incense Smoke -->
+      <svg class="incense-smoke" viewBox="0 0 40 120"><path d="M20,120 Q25,90 15,60 Q5,30 20,0" stroke="#fffbe6" stroke-width="3" fill="none" opacity="0.5"/></svg>
+      <svg class="incense-smoke incense-smoke2" viewBox="0 0 32 100"><path d="M16,100 Q20,70 12,40 Q4,10 16,0" stroke="#ffd700" stroke-width="2" fill="none" opacity="0.4"/></svg>
+      <!-- Bamboo Sway -->
+      <img src="assets/bamboo.png" alt="Bamboo" class="bamboo-sway" />
+      <div class="chatbot-guardians-flex">
+        <img src="assets/dragon.png" alt="Guardian Dragon" class="guardian-dragon" />
+        <div class="mystic-frame w-full max-w-3xl mx-auto flex justify-center items-center relative" style="min-height: 700px;">
+          <img src="assets/chip.png" alt="Chip Tech" class="chip-bg" />
+          <iframe
+            src="https://www.chatbase.co/chatbot-iframe/x2BswaUeGdNYBUbfsfprv"
+            width="100%"
+            style="height: 100%; min-height: 700px; z-index: 1; position: relative; background: #3B0000; border-radius: 2.5rem;"
+            frameborder="0"
+          ></iframe>
+        </div>
+        <img src="assets/white-tiger.png" alt="Silent Tiger" class="guardian-tiger" />
+      </div>
+      <!-- Coin-style Social Buttons -->
+      <div class="flex flex-row justify-center mt-8 z-10">
+        <a href="#" class="coin-btn" title="Telegram">
+          <img src="assets/telegram.png" alt="Telegram" class="w-10 h-10" />
+        </a>
+        <a href="#" class="coin-btn" title="X (Twitter)">
+          <img src="assets/x-com.png" alt="X (Twitter)" class="w-10 h-10" />
+        </a>
+      </div>
+    </section>
+    <!-- 🔚 Footer -->
+    <footer class="relative flex flex-col items-center py-8 bg-[#C40000] text-[#fffbe6]">
+      <img src="assets/e08f5ad41f27996e6c8cedddd986d432-chinese-symbol-geometric.webp" alt="Footer Logo" class="footer-logo absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 object-contain" />
+      <div class="relative z-10 text-center text-xs font-semibold">
+        © 2024 ChineseGPT. All rights reserved. Not financial advice.
+      </div>
+    </footer>
+    <script>
+      // Floating Fortune Cookie Effect
+      const fortunes = [
+        "Only fools sell before enlightenment.",
+        "Buy now. Understand later.",
+        "Mandarin never lies.",
+        "You will be rugged. Or not.",
+        "The Whale decides your fate."
+      ];
+      const cookieCount = 4;
+      const cookiesRoot = document.getElementById('fortune-cookies-root');
+      function randomBetween(a, b) { return a + Math.random() * (b - a); }
+      for (let i = 0; i < cookieCount; i++) {
+        const left = randomBetween(5, 85); // percent
+        const delay = randomBetween(0, 4); // seconds
+        const duration = randomBetween(8, 12); // seconds
+        const rotate = randomBetween(-30, 30); // deg
+        const scale = randomBetween(0.9, 1.15);
+        const fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+        const div = document.createElement('div');
+        div.className = 'fortune-cookie fortune-wiggle';
+        div.style.left = left + 'vw';
+        div.style.animationDelay = delay + 's';
+        div.style.animationDuration = duration + 's';
+        div.style.transform = `rotate(${rotate}deg) scale(${scale})`;
+        div.innerHTML = `
+          <img src="assets/cookie.png" alt="Fortune Cookie" style="width:100%;height:100%;pointer-events:none;user-select:none;" draggable="false" />
+          <span class="fortune-tooltip">${fortune}</span>
+        `;
+        // On hover, randomize fortune
+        div.addEventListener('mouseenter', function() {
+          const tip = div.querySelector('.fortune-tooltip');
+          tip.textContent = fortunes[Math.floor(Math.random() * fortunes.length)];
+        });
+        cookiesRoot.appendChild(div);
+      }
+      // Fade-in/float animation for scroll Chinese stack
+      window.addEventListener('scroll', function() {
+        var el = document.getElementById('scroll-chinese-stack');
+        if (!el) return;
+        var rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 80) {
+          el.classList.add('visible');
+        } else {
+          el.classList.remove('visible');
+        }
+      });
+    </script>
+  </body>
+</html> 
